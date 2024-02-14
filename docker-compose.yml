@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  qa-plataforma:
+    container_name: qa-plataforma
+    build: .
+    restart: unless-stopped
+    ports:
+      - 8092:8501
+    volumes:
+      - .:/app/qa-plataforma
+
+    network_mode: "host"

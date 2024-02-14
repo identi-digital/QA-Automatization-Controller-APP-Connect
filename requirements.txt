@@ -1,0 +1,4 @@
+selenium
+Appium-Python-Client==2.11.1
+streamlit
+st-gsheets-connection
