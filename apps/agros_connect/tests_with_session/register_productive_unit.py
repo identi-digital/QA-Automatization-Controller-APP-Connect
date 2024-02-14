@@ -9,7 +9,7 @@ def register_productive_unit(sesion: NavigatorAppium, offline: bool):
     sesion.select_multiple_elements_by_XPATH(widgets)
 
     # Nombre
-    sesion.type_from_multiple(1, "UNIDAD PRUEBA")
+    sesion.type_from_multiple(1, f"UNIDAD PRUEBA {random.randint(1000,2000)} FA")
 
     # Area
     sesion.type_from_multiple(2, "500")
@@ -30,6 +30,7 @@ def register_productive_unit(sesion: NavigatorAppium, offline: bool):
 
     # Ubicacion de ingreso
     sesion.click_element("6. Capturar ubicación de ingreso (Opcional)", "id")
+    time.sleep(3)
 
     sesion.movement_in_view(40)
 
@@ -101,5 +102,5 @@ def register_productive_unit(sesion: NavigatorAppium, offline: bool):
     )
 
     # Registrar
-    sesion.click_element("Siguiente", "id")
+    sesion.click_element("Registrar", "id")
     sesion.click_element("ACEPTAR", "id")

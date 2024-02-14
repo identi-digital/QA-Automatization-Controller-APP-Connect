@@ -1,33 +1,29 @@
 from models.appium_class import NavigatorAppium
 from appium.options.common.base import AppiumOptions
-from apps.agros_connect.tests.register_producer import register_producer
-from apps.agros_connect.tests.register_productive_unit import register_productive_unit
-from apps.agros_connect.tests.form_all_params import (
-    fill_text_form,
-    fill_photo_form,
-    fill_multiple_option_form,
-)
+
+from apps.appcopio.tests.register_associate_lote import register_associate_lote, register_not_associate_lote
 
 import time
 
 
 def init_session(session: NavigatorAppium):
 
+    session.select_multiple_elements_by_XPATH("//android.widget.EditText")
+
     # Ingresar usuario
-    session.type_element(
-        "qa_app_user", '(//android.widget.EditText[@text="Usuario"])[2]', "xpath"
-    )
+    session.type_from_multiple(0, 'fandia_acp')
 
-    # Ingresar contraseña
-    session.type_element(
-        "agROS_2023!", '(//android.widget.EditText[@text="Contraseña"])[2]', "xpath"
-    )
+    session.type_from_multiple(1, 'Agros-6776')
 
-    # Click Iniciar
-    session.click_element('//android.widget.Button[@content-desc="Ingresar"]', "xpath")
+    session.click_element("Iniciar sesión", 'id')
+
+    time.sleep(5)
+
+    session.click_element("Ingresar", 'id')
 
 
-def script_router_online(test_name: str):
+
+def script_router_online_appcopio(test_name: str):
 
     # selenium_grid_url = 'http://localhost:4444/'
     appium_url = "http://127.0.0.1:4723"
@@ -36,8 +32,8 @@ def script_router_online(test_name: str):
         "platformName": "Android",
         "platformVersion": "14",
         "automationName": "UiAutomator2",
-        # "appPackage": "global.identi.stage",
-        # "appActivity": "tech.agros.connect.MainActivity",
+        "appPackage": "com.example.appcopio",
+        "appActivity": ".MainActivity",
     }
 
     capabilities = AppiumOptions().load_capabilities(capabilities)
@@ -50,39 +46,23 @@ def script_router_online(test_name: str):
 
         match test_name:
 
-            case "REGISTRAR PRODUCTOR":
+            case "REGISTRAR LOTE":
 
                 # Inicio de sesion en la aplicacion
                 init_session(app_session)
 
-                time.sleep(5)
+                time.sleep(time_to_wait_data_app)
 
-                register_producer(app_session)
-                register_productive_unit(app_session, False)
+                register_associate_lote(app_session)
 
-            case "FORMULARIO FOTOS":
+            case 'REGISTRAR LOTE NO ASOCIADO':
 
-                # init_session(app_session)
+                init_session(app_session)
 
-                # time.sleep(time_to_wait_data_app)
+                time.sleep(40)
 
-                fill_photo_form(app_session, False)
+                register_not_associate_lote(app_session)
 
-            case "FORMULARIO TEXTO":
-
-                # init_session(app_session)
-
-                # time.sleep(time_to_wait_data_app)
-
-                fill_text_form(app_session, False)
-
-            case "FORMULARIO OPCION MULTIPLE":
-
-                # init_session(app_session)
-
-                # time.sleep(time_to_wait_data_app)
-
-                fill_multiple_option_form(app_session, False)
 
         app_session.close_app()
         app_session.quit()
@@ -96,7 +76,7 @@ def script_router_online(test_name: str):
         app_session.quit()
 
 
-def script_router_offline(test_name: str):
+def script_router_offline_appcopio(test_name: str):
 
     # selenium_grid_url = 'http://localhost:4444/'
     appium_url = "http://127.0.0.1:4723"
@@ -105,37 +85,42 @@ def script_router_offline(test_name: str):
         "platformName": "Android",
         "platformVersion": "14",
         "automationName": "UiAutomator2",
-        "appPackage": "global.identi.stage",
-        "appActivity": "tech.agros.connect.MainActivity",
+        "appPackage": "com.example.appcopio",
+        "appActivity": ".MainActivity",
     }
 
     capabilities = AppiumOptions().load_capabilities(capabilities)
 
     app_session = NavigatorAppium(command_executor=appium_url, options=capabilities)
 
+    time_to_wait_data_app = 50
+
     try:
 
         match test_name:
 
-            case "REGISTRAR PRODUCTOR":
+            case "REGISTRAR LOTE":
 
                 # Inicio de sesion en la aplicacion
                 init_session(app_session)
 
-                time.sleep(2)
-
-                register_producer(app_session)
-                register_productive_unit(app_session, True)
-
-            case "FORMULARIO FOTOS":
-
-                init_session(app_session)
-
-                time.sleep(22)
+                time.sleep(time_to_wait_data_app)
 
                 app_session.toggle_wifi()
 
-                fill_text_form(app_session)
+                register_associate_lote(app_session)
+
+                app_session.toggle_wifi()
+
+            case 'REGISTRAR LOTE NO ASOCIADO':
+
+                init_session(app_session)
+
+                time.sleep(time_to_wait_data_app)
+
+                app_session.toggle_wifi()
+
+                register_not_associate_lote(app_session)
 
                 app_session.toggle_wifi()
 

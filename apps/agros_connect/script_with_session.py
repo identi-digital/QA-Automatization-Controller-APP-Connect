@@ -25,10 +25,10 @@ def script_router_online_with_session(test_name: str):
 
             case "REGISTRAR PRODUCTOR":
 
-                for e in range(0,20):
+                # for e in range(0,20):
 
-                    register_producer(app_session)
-                    register_productive_unit(app_session, False)
+                # register_producer(app_session)
+                register_productive_unit(app_session, False)
 
             case "FORMULARIO FOTOS":
 
